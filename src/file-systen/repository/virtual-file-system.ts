@@ -21,11 +21,9 @@ export class MemFileSystem implements IFileSystem {
     const entries = fs.readdirSync(pathFile)
 
     return entries.map((entry) => {
-      const fullPath = `${pathFile}/${entry}`
+      const fullPath = `${pathFile}${entry}`
 
-			if(!fs) {
-				throw new Error('File system is not initialized')
-			}
+			const fs = this.getFs();
 
       const stats = fs.statSync(fullPath)
 
@@ -74,6 +72,7 @@ export class MemFileSystem implements IFileSystem {
 
     const content = fs.readFileSync(pathFile, "utf-8") as string
     const name = path.basename(pathFile)
+
     return {
       name,
       path: pathFile,
@@ -84,7 +83,7 @@ export class MemFileSystem implements IFileSystem {
 	writeFileSync({ path, content }: IWriteFile): void {
 		const fs = this.getFs();
 
-		fs.writeFileSync(path, content);
+		fs.writeFileSync(path, content, );
 	}
 
 	existsSync(path: string): boolean {

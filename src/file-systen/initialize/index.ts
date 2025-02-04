@@ -1,2 +1,2 @@
-export { fileSystem } from './init';
+export { createFileSystem } from './file-system-factory';
 export type { IWorkspaceUseCase } from './types';

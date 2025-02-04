@@ -1,4 +1,4 @@
-import { IDirectory, IFile, IWriteFile, IWorkspace } from '../entity';
+import { IDirectory, IFile, IWriteFile, WorkspaceType } from '../entity';
 
 interface IFileSystem {
 	readSync(pathFile: string): Array<IFile | IDirectory>;
@@ -16,12 +16,8 @@ export class WorkspaceUseCase {
 		private readonly basePath: string = '/'
 	) {}
 
-	getWorkspace(): IWorkspace {
-		const workspace = this.fs.readSync(this.basePath);
-
-		return {
-			workspace
-		};
+	getWorkspace(): WorkspaceType {
+		return this.fs.readSync(this.basePath);
 	}
 
 	getCurrentFile(): IFile | null {
@@ -34,5 +30,6 @@ export class WorkspaceUseCase {
 
 	updateFileContent(writeFile: IWriteFile): void {
 		this.fs.writeFileSync(writeFile);
+		this.currentFile = this.fs.readFileSync(writeFile.path);
 	}
 }

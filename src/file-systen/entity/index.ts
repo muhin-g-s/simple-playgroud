@@ -1,2 +1,2 @@
 export type { IFile, IDirectory, IWriteFile } from './file';
-export type { IWorkspace } from './workspace';
+export type { WorkspaceType, WorkspaceItem } from './workspace';

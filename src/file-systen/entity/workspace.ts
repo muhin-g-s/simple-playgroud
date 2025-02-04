@@ -1,6 +1,5 @@
-export interface IWorkspace {
-	workspace: Array<IFile | IDirectory>;
-}
+export type WorkspaceType = Array<WorkspaceItem>;
+export type WorkspaceItem = IFile | IDirectory;
 
 interface IFile {
 	readonly name: string;

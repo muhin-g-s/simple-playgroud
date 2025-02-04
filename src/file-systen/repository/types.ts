@@ -10,4 +10,5 @@ export interface IFileSystem {
 	readFileSync(pathFile: string): IFile;
 	writeFileSync({ path, content }: IWriteFile): void;
 	existsSync(path: string): boolean;
+	initialize(): Promise<void>;
 }
