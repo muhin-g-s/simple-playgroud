@@ -1,0 +1,1 @@
+export { EditorComponent } from './ui/editor-component'
