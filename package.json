@@ -11,14 +11,19 @@
   },
   "dependencies": {
     "buffer": "^6.0.3",
+    "esbuild": "^0.24.2",
+    "esbuild-wasm": "^0.24.2",
     "memfs": "^4.17.0",
+    "path": "^0.12.7",
     "path-browserify": "^1.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "vite-plugin-node-polyfills": "^0.23.0"
+    "vite-plugin-node-polyfills": "^0.23.0",
+    "vite-plugin-wasm": "^3.4.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@types/node": "^22.13.1",
     "@types/path-browserify": "^1.0.3",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
@@ -29,6 +34,7 @@
     "globals": "^15.14.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
-    "vite": "^6.0.5"
+    "vite": "^6.0.5",
+    "vite-plugin-html": "^3.2.2"
   }
 }

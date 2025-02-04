@@ -1,5 +1,7 @@
 import { IFile } from '../../../file-systen'
 
+import styles from './styles.module.css'
+
 interface IEditorProps {
   file: IFile | null
   onContentChange: (content: string) => void
@@ -11,11 +13,10 @@ export function EditorComponent({ file, onContentChange }: IEditorProps) {
   }
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">{file.name}</h2>
+    <div className={styles.container}>
+      <h2>{file.name}</h2>
       <textarea
-				// key={file.path}
-        className="w-full h-[calc(100vh-8rem)] p-2 border rounded"
+        className={styles.editor}
         value={file.content}
         onChange={(e) => onContentChange(e.target.value)}
       />
