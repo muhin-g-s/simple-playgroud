@@ -5,22 +5,15 @@ import { WorkspaceComponent } from './workspace'
 
 import styles from './App.module.css';
 import { useFileSystem } from './file-systen';
-import ESService from './preview/services';
-import { useEffect } from 'react';
+import { useEsBuild } from './preview/hooks/use-esbuild';
+import { useBuildOnce } from './preview/hooks';
 
 function App() {
 	const { workspace, currentFile, handleFileSelect, handleFileContentChange, loading } = useFileSystem()
+	const { triggerBuild } = useEsBuild();
 
-	useEffect(() => {
-    if (currentFile?.content) {
-      ESService.build(currentFile.content).catch((e) => {
-        console.error("Build failed:", e);
-      });
-    }
-  }, [currentFile?.content]);
-
+	useBuildOnce(currentFile?.content, triggerBuild);
 	
-
   if (loading) {
     return <div>loading...</div>
   }
