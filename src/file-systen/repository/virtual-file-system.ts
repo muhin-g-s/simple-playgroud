@@ -32,9 +32,9 @@ export class MemFileSystem implements IFileSystem {
       }
 
       if (stats.isDirectory()) {
-        return this.createDirectory(entry, fullPath)
+        return this.createDirectory(entry as string, fullPath)
       } else if (stats.isFile()) {
-        return this.createFile(entry, fullPath)
+        return this.createFile(entry as string, fullPath)
       } else {
         throw new Error(`Unknown file type for ${fullPath}`)
       }
@@ -60,7 +60,7 @@ export class MemFileSystem implements IFileSystem {
       }
 
       if (stats.isDirectory()) {
-        return this.createDirectory(entry, fullPath)
+        return this.createDirectory(entry as string, fullPath)
       }
 
       throw new Error(`Unknown file type for ${fullPath}`)
@@ -110,7 +110,7 @@ export class MemFileSystem implements IFileSystem {
     return {
       name,
       path,
-      content: this.fs.readFileSync(path, "utf-8"),
+      content: this.fs.readFileSync(path, "utf-8") as string,
     }
   }
 

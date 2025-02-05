@@ -1,6 +1,6 @@
 import { IInitializationStrategy } from './types';
 
-const defaultModelValue = `import React from 'react';
+export const defaultModelValue = `import React from 'react';
 import ReactDOM from 'react-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import { HashRouter, Link, Route, Routes } from 'react-router-dom';
@@ -84,7 +84,18 @@ ReactDOM.render(<App />, root);
 export class DefaultInitializationStrategy implements IInitializationStrategy {
 	async getInitialState(): Promise<{ [path: string]: string }> {
 		return {
-			"/test.txt": defaultModelValue,
+			"./main.tsx": `import { App } from './App';
+				ReactDOM.render(<App />, document.getElementById('app'));
+			`,
+			"./App.tsx": `import { Test } from './Test';
+				export const App = () => <div><Test/></div>;
+			`,
+			"./Test.tsx": `
+				export const Test = () => <div>Hello World</div>;
+			`,
 		}
+		// return {
+		// 	"./test.tsx": defaultModelValue,
+		// }
 	}
 }

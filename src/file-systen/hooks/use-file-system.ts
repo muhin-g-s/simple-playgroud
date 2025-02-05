@@ -15,7 +15,8 @@ type Action =
   | { type: 'SET_WORKSPACE'; payload: WorkspaceType }
   | { type: 'SET_CURRENT_FILE'; payload: IFile | null }
   | { type: 'SET_LOADING'; payload: boolean }
-  | { type: 'SET_ERROR'; payload: Error | null };
+  | { type: 'SET_ERROR'; payload: Error | null }
+	| { type: 'UPDATE_WORKSPACE'; payload: WorkspaceType };
 
 const initialState: State = {
   workspaceUseCase: null,
@@ -37,6 +38,8 @@ function reducer(state: State, action: Action): State {
       return { ...state, loading: action.payload };
     case 'SET_ERROR':
       return { ...state, error: action.payload };
+		case 'UPDATE_WORKSPACE':
+			return { ...state, workspace: action.payload };
     default:
       return state;
   }
@@ -79,13 +82,14 @@ export function useFileSystem() {
     updateCurrentFile();
   }, [state.workspaceUseCase]);
 
-  const handleFileSelect = useCallback((filePath: string) => {
+	const handleFileSelect = useCallback((filePath: string) => {
     if (!state.workspaceUseCase) return;
 
     try {
       state.workspaceUseCase.setCurrentFile(filePath);
       const updatedFile = state.workspaceUseCase.getCurrentFile();
       dispatch({ type: 'SET_CURRENT_FILE', payload: updatedFile });
+      dispatch({ type: 'UPDATE_WORKSPACE', payload: state.workspaceUseCase.getWorkspace() });
     } catch (err) {
       dispatch({ type: 'SET_ERROR', payload: err instanceof Error ? err : new Error('Failed to select file') });
     }
@@ -104,6 +108,7 @@ export function useFileSystem() {
       if (!updatedFile) return;
 
       dispatch({ type: 'SET_CURRENT_FILE', payload: updatedFile });
+      dispatch({ type: 'UPDATE_WORKSPACE', payload: state.workspaceUseCase.getWorkspace() });
     } catch (err) {
       dispatch({ type: 'SET_ERROR', payload: err instanceof Error ? err : new Error('Failed to update file') });
     }
