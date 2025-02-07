@@ -3,11 +3,12 @@ import * as path from "path"
 import { Volume, type IFs } from "memfs"
 import type { Plugin, BuildOptions, BuildResult } from "esbuild"
 import esWasm from "esbuild-wasm/esbuild.wasm?url"
+import { IBuilder } from './interfaces';
 
 const PROJECT_NAMESPACE = "project"
 const NODE_MODULES_NS = "node_modules"
 
-export class ESService {
+export class ESBuild implements IBuilder {
   private initialized = false
   private vol: IFs
   private entryPoint: string | null = null
@@ -172,3 +173,4 @@ export class ESService {
   }
 }
 
+ 

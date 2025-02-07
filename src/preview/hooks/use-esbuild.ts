@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
-import { ESService } from '../services';
 import { IFile, WorkspaceItem, WorkspaceType } from '../../file-systen';
+import { createEsBuilder, IBuilder } from '../services';
 
 function getAllFiles(workspace: WorkspaceType): IFile[] {
   const files: IFile[] = []
@@ -31,11 +31,11 @@ export const useEsBuild = () => {
     loading: false,
     error: null,
   })
-  const esServiceRef = useRef<ESService | null>(null)
+  const esServiceRef = useRef<IBuilder | null>(null)
 
   const initializeESService = useCallback(() => {
     if (!esServiceRef.current) {
-      esServiceRef.current = new ESService()
+      esServiceRef.current = createEsBuilder();
     }
     return esServiceRef.current
   }, [])
@@ -54,6 +54,7 @@ export const useEsBuild = () => {
   const setEntryPoint = useCallback(
     (entryPoint: string) => {
       const esService = initializeESService()
+			console.log("dddd", entryPoint);
       esService.setEntryPoint(entryPoint)
     },
     [initializeESService],

@@ -15,9 +15,10 @@ function App() {
   useEffect(() => {
 		async function addFilesToEsService() {
 			if (workspace.length > 0) {
-				addFiles(workspace)
 				const entryPoint = './main.tsx';
 				setEntryPoint(entryPoint)
+
+				addFiles(workspace)
 				await triggerBuild()
 			}	
 		}
