@@ -99,10 +99,7 @@ export function useFileSystem() {
     if (!state.currentFile || !state.workspaceUseCase) return;
 
     try {
-      state.workspaceUseCase.updateFileContent({
-        path: state.currentFile.path,
-        content: content,
-      });
+      state.workspaceUseCase.updateFileContent(content);
 
       const updatedFile = state.workspaceUseCase.getCurrentFile();
       if (!updatedFile) return;

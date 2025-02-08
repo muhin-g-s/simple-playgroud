@@ -1,4 +1,4 @@
-import { IFile, WorkspaceType, IWriteFile } from '../entity';
+import { IFile, WorkspaceType } from '../entity';
 
 export interface IWorkspaceUseCase {
 	getWorkspace(): WorkspaceType;
@@ -7,5 +7,5 @@ export interface IWorkspaceUseCase {
 
 	setCurrentFile(filePath: string): void;
 
-	updateFileContent(writeFile: IWriteFile): void;
+	updateFileContent(content: string): void;
 }

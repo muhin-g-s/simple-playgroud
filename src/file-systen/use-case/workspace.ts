@@ -28,8 +28,15 @@ export class WorkspaceUseCase {
 		this.currentFile = this.fs.readFileSync(filePath);
 	}
 
-	updateFileContent(writeFile: IWriteFile): void {
-		this.fs.writeFileSync(writeFile);
-		this.currentFile = this.fs.readFileSync(writeFile.path);
+	updateFileContent(content: string): void {
+		if(!this.currentFile) {
+			console.error('Current file is not set');
+			return; 
+		}
+
+		const { path } = this.currentFile;
+
+		this.fs.writeFileSync({ path, content });
+		this.currentFile.content = content;
 	}
 }
