@@ -1,9 +1,9 @@
 import esbuild from "esbuild-wasm";
 import * as path from "path"
 import { Volume, type IFs } from "memfs"
-import type { Plugin, BuildOptions, BuildResult } from "esbuild"
+import type { Plugin, BuildOptions, BuildResult, OnLoadArgs } from "esbuild"
 import esWasm from "esbuild-wasm/esbuild.wasm?url"
-import { IBuilder } from './interfaces';
+import { IBuilder, IBuilderConfig } from './interfaces';
 
 const PROJECT_NAMESPACE = "project"
 const NODE_MODULES_NS = "node_modules"
@@ -13,7 +13,7 @@ export class ESBuild implements IBuilder {
   private vol: IFs
   private entryPoint: string | null = null
 
-  constructor() {
+  constructor(private readonly config: IBuilderConfig) {
     this.vol = Volume.fromJSON({}) as IFs
     this.initialize = this.initialize.bind(this)
     this.setEntryPoint = this.setEntryPoint.bind(this)
@@ -57,7 +57,7 @@ export class ESBuild implements IBuilder {
       resolvedPath = path.resolve(path.dirname(importer), id)
     }
 
-    const extensions = ["", ".ts", ".tsx", ".js", ".jsx", "/index.ts", "/index.tsx"]
+    const { extensions } = this.config
 
     for (const ext of extensions) {
       const testPath = ext.startsWith("/") ? path.join(resolvedPath, ext) : resolvedPath + ext
@@ -123,10 +123,10 @@ export class ESBuild implements IBuilder {
     return {
       name: "external-packages",
       setup: (build) => {
-        build.onLoad({ filter: /.*/, namespace: NODE_MODULES_NS }, async (args) => {
-          this.trackExternalPackage(args.path)
+        build.onLoad({ filter: /.*/, namespace: NODE_MODULES_NS }, async ({ path } : OnLoadArgs) => {
+          this.trackExternalPackage(path)
           return {
-            contents: `module.exports = window['${args.path}'];`,
+            contents: this.config.getExternalPackageContent(path),
             loader: "js",
           }
         })
@@ -140,8 +140,8 @@ export class ESBuild implements IBuilder {
       bundle: true,
       plugins: [this.createFsPlugin(), this.createExternalPlugin()],
       write: false,
-      absWorkingDir: "/project",
-      nodePaths: ["/project/node_modules"],
+      absWorkingDir: this.config.workingDir,
+      nodePaths: this.config.nodeModulesPaths,
     }
   }
 
@@ -158,18 +158,13 @@ export class ESBuild implements IBuilder {
   }
 
   private trackExternalPackage(pkg: string): void {
-    const externals = JSON.parse(localStorage.getItem("externals") || "{}")
-    localStorage.setItem("externals", JSON.stringify({ ...externals, [pkg]: true }))
+		this.config.onExternalPackage(pkg);
   }
 
   private handleBuildResult(result: BuildResult): void {
-    result.outputFiles?.forEach((file) => {
-      const jsFile = new File([file.text], "index.js", {
-        type: "text/javascript",
-      })
-      const objectURL = URL.createObjectURL(jsFile)
-      localStorage.setItem("script", objectURL)
-    })
+		if (result.outputFiles) {
+      this.config.onOutputGenerated(result.outputFiles.map(el => el.text));
+    }
   }
 }
 
