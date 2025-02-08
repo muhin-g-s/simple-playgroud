@@ -54,7 +54,6 @@ export const useEsBuild = () => {
   const setEntryPoint = useCallback(
     (entryPoint: string) => {
       const esService = initializeESService()
-			console.log("dddd", entryPoint);
       esService.setEntryPoint(entryPoint)
     },
     [initializeESService],
