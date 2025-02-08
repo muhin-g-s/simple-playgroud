@@ -1,5 +1,6 @@
 import { ESBuild } from './esbuild-builder';
-import { IBuilder, IBuilderConfig } from './interfaces';
+import { IBuilder, IBuilderConfig, IBuilderUseCase } from './interfaces';
+import { BuilderUseCase } from './use-case';
 
 let builder: IBuilder | null  = null; 
 
@@ -25,10 +26,10 @@ const config: IBuilderConfig = {
   }
 }
 
-export function createEsBuilder(): IBuilder {
+export function getEsBuilder(): IBuilderUseCase {
 	if(!builder) {
 		builder = new ESBuild(config); 
 	}
 
-	return builder;
+	return new BuilderUseCase(builder);
 }
