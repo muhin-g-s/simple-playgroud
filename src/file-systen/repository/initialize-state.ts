@@ -84,7 +84,11 @@ ReactDOM.render(<App />, root);
 export class DefaultInitializationStrategy implements IInitializationStrategy {
 	async getInitialState(): Promise<{ [path: string]: string }> {
 		return {
-			"./main.tsx": `import { App } from './App';
+			"./main.tsx": `
+				import React from 'react';
+				import { App } from './App';
+				import ReactDOM from 'react-dom';
+
 				ReactDOM.render(<App />, document.getElementById('app'));
 			`,
 			"./App.tsx": `import { Test } from './Test';

@@ -10,7 +10,7 @@ const config: IBuilderConfig = {
   nodeModulesPaths: ["/project/node_modules"],
   onExternalPackage: pkg => {
    const externals = JSON.parse(localStorage.getItem("externals") || "{}")
-	localStorage.setItem("externals", JSON.stringify({ ...externals, [pkg]: true }))
+	 localStorage.setItem("externals", JSON.stringify({ ...externals, [pkg]: true }))
   },
   onOutputGenerated: files => {
     files.forEach(file => {
@@ -22,7 +22,7 @@ const config: IBuilderConfig = {
 		});
   },
   getExternalPackageContent: pkg => {
-    return `export default window._externals.${pkg}`;
+    return `export default window._externals['${pkg}']`;
   }
 }
 

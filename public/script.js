@@ -1,8 +1,11 @@
-window['react'] = window.React;
-window['react-dom'] = window.ReactDOM;
-window['react-router-dom'] = window.ReactRouterDOM;
-window['styled-components'] = window.styled;
+const _externals = {};
 
+_externals['react'] = window.React;
+_externals[`react-dom`] = window.ReactDOM;
+_externals['react-router-dom'] = window.ReactRouterDOM;
+_externals['styled-components'] = window.styled;
+
+window['_externals'] = _externals;
 
 window['resolver'] = (val) => window.parent.parent.postMessage(val, '*');
 

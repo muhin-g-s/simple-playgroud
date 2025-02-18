@@ -89,9 +89,9 @@ export class ESBuild implements IBuilder {
               id: args.path,
               importer: args.pluginData?.importer || "",
             })
+
             return { path: resolved, namespace: PROJECT_NAMESPACE }
-          } catch (error) {
-            console.error("File resolve error:", error)
+          } catch {
             return {
               path: args.path,
               namespace: NODE_MODULES_NS,
@@ -123,8 +123,9 @@ export class ESBuild implements IBuilder {
     return {
       name: "external-packages",
       setup: (build) => {
-        build.onLoad({ filter: /.*/, namespace: NODE_MODULES_NS }, async ({ path } : OnLoadArgs) => {
+        build.onLoad({ filter: /.*/, namespace: NODE_MODULES_NS }, ({ path } : OnLoadArgs) => {
           this.trackExternalPackage(path)
+					
           return {
             contents: this.config.getExternalPackageContent(path),
             loader: "js",
